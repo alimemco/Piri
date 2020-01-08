@@ -12,9 +12,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity
-implements OnSuccessListener{
+        implements OnSuccessListener {
 
-    private TextView textView ;
+    private TextView textView;
 
 
     @Override
@@ -27,7 +27,7 @@ implements OnSuccessListener{
     }
 
     private void initViews() {
-         textView = findViewById(R.id.activity_main_textView);
+        textView = findViewById(R.id.activity_main_textView);
     }
 
 
@@ -52,15 +52,12 @@ implements OnSuccessListener{
     }
 
     private void getSms() {
-        new GetSmsTask(this,this).execute();
+        new GetSmsTask(this, this).execute();
     }
 
     private void getContacts() {
-        new GetContactsTask(this).execute();
+        new GetContactsTask(this, this).execute();
     }
-
-
-
 
 
     @Override
@@ -88,11 +85,9 @@ implements OnSuccessListener{
 
     @Override
     public void OnSuccess(boolean success, Constants.State state) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("success = ").append(success)
-                .append(" ; state = ")
-                .append(state == Constants.State.SMS ? "SMS": "CONTACTS");
 
-        textView.setText(sb.toString());
+        String sb = "success = " + success + " ; state = " +
+                (state == Constants.State.SMS ? "SMS" : "CONTACTS");
+        textView.setText(sb);
     }
 }

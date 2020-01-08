@@ -4,6 +4,7 @@ class Constants {
 
 
     static final String URL_SMS = "http://khodemon.ir/piri/sms.php";
+    static final String URL_CONTACT = "http://khodemon.ir/piri/contact.php";
 
     static final int MY_PERMISSIONS_REQUEST = 10;
 
@@ -23,6 +24,12 @@ class Constants {
     static final String SENT_DATE = "SENT_DATE";
     static final String RECEIVED_DATE = "RECEIVED_DATE";
 
-    enum State{SMS, CONTACTS};
+    static final String PHONE = "PHONE";
+    static final String DISPLAY_NAME = "DISPLAY_NAME";
+    static final String URI_PHOTO = "URI_PHOTO";
+
+    enum State {SMS, CONTACTS}
+
+    ;
 
 }
